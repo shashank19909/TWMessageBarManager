@@ -23,6 +23,7 @@
 		5669FE471766C47700B8630B /* icon-success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5669FE411766C47700B8630B /* icon-success@2x.png */; };
 		569FCDF81741C09300F2B74C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FCDF41741C09300F2B74C /* AppDelegate.m */; };
 		569FCDF91741C09300F2B74C /* TWMesssageBarDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 569FCDF71741C09300F2B74C /* TWMesssageBarDemoController.m */; };
+		963355031D1C0BC700D31039 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 963355021D1C0BC700D31039 /* CoreImage.framework */; };
 		9B903012185BA74B005BCFF5 /* TWMessageBarManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B903011185BA74B005BCFF5 /* TWMessageBarManager.m */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +50,7 @@
 		569FCDF61741C09300F2B74C /* TWMesssageBarDemoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWMesssageBarDemoController.h; sourceTree = "<group>"; };
 		569FCDF71741C09300F2B74C /* TWMesssageBarDemoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWMesssageBarDemoController.m; sourceTree = "<group>"; };
 		56DE553917458AB20026B7D2 /* StringConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringConstants.h; sourceTree = "<group>"; };
+		963355021D1C0BC700D31039 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		9B903010185BA74B005BCFF5 /* TWMessageBarManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TWMessageBarManager.h; path = ../../../Classes/TWMessageBarManager.h; sourceTree = "<group>"; };
 		9B903011185BA74B005BCFF5 /* TWMessageBarManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TWMessageBarManager.m; path = ../../../Classes/TWMessageBarManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -58,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				963355031D1C0BC700D31039 /* CoreImage.framework in Frameworks */,
 				5649825E1741BF7A00077B8C /* UIKit.framework in Frameworks */,
 				564982601741BF7A00077B8C /* Foundation.framework in Frameworks */,
 				564982621741BF7A00077B8C /* CoreGraphics.framework in Frameworks */,
@@ -97,6 +100,7 @@
 		5649825C1741BF7A00077B8C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				963355021D1C0BC700D31039 /* CoreImage.framework */,
 				5649825D1741BF7A00077B8C /* UIKit.framework */,
 				5649825F1741BF7A00077B8C /* Foundation.framework */,
 				564982611741BF7A00077B8C /* CoreGraphics.framework */,

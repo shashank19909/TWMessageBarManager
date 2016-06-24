@@ -92,6 +92,15 @@ typedef NS_ENUM(NSInteger, TWMessageBarMessageType) {
  */
 - (nonnull UIColor *)descriptionColorForMessageType:(TWMessageBarMessageType)type;
 
+
+
+
+
+
+
+
+
+
 @end
 
 @interface TWMessageBarManager : NSObject
@@ -234,5 +243,12 @@ typedef NS_ENUM(NSInteger, TWMessageBarMessageType) {
  *  @return YES if the device instance is running an OS >= 7, otherwise NO.
  */
 - (BOOL)tw_isRunningiOS7OrLater;
+
+/**
+ *  Determines if the device instance is running iOS 8 or later.
+ *
+ *  @return YES if the device instance is running an OS >= 8, otherwise NO.
+ */
+- (BOOL)tw_isRunningiOS8OrLater;
 
 @end

@@ -18,6 +18,8 @@ CGFloat const kTWMessageViewBarPadding = 10.0f;
 CGFloat const kTWMessageViewIconSize = 36.0f;
 CGFloat const kTWMessageViewTextOffset = 2.0f;
 NSUInteger const kTWMessageViewiOS7Identifier = 7;
+NSUInteger const kTWMessageViewiOS8Identifier = 8;
+
 
 // Numerics (TWMessageBarManager)
 CGFloat const kTWMessageBarManagerDisplayDelay = 3.0f;
@@ -243,6 +245,9 @@ static UIColor *kTWDefaultMessageBarStyleSheetInfoStrokeColor = nil;
     [[self messageWindowView] bringSubviewToFront:messageView];
     
     [self.messageBarQueue addObject:messageView];
+    
+    
+    
     
     if (!self.messageVisible)
     {
@@ -505,6 +510,24 @@ static UIColor *kTWDefaultMessageBarStyleSheetInfoStrokeColor = nil;
     {
         id<TWMessageBarStyleSheet> styleSheet = [self.delegate styleSheetForMessageView:self];
         
+        
+        CGSize size = self.frame.size;
+        UIGraphicsBeginImageContext(size);
+        CGContextRef c = UIGraphicsGetCurrentContext();
+        CGContextTranslateCTM(c, 0, 0);
+        [self.layer renderInContext:c]; // view is the view you are grabbing the screen shot of. The view that is to be blurred.
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        UIImage *blurredImage = [self blurWithCoreImage:image];
+    
+        //Place the UIImage in a UIImageView
+        UIImageView *newView = [[UIImageView alloc] initWithFrame:self.bounds];
+        newView.image = blurredImage;
+        [self addSubview:newView];
+        
+        
+        
+        
         // background fill
         CGContextSaveGState(context);
         {
@@ -590,6 +613,7 @@ static UIColor *kTWDefaultMessageBarStyleSheetInfoStrokeColor = nil;
             [self.descriptionString drawInRect:CGRectMake(xOffset, yOffset, descriptionLabelSize.width, descriptionLabelSize.height) withFont:[self descriptionFont] lineBreakMode:NSLineBreakByTruncatingTail alignment:NSTextAlignmentLeft];
 #pragma clang diagnostic pop
         }
+    
     }
 }
 
@@ -739,6 +763,51 @@ static UIColor *kTWDefaultMessageBarStyleSheetInfoStrokeColor = nil;
     [self setNeedsDisplay];
 }
 
+- (UIImage *)blurWithCoreImage:(UIImage *)sourceImage
+{
+    CIImage *inputImage = [CIImage imageWithCGImage:sourceImage.CGImage];
+    
+    // Apply Affine-Clamp filter to stretch the image so that it does not
+    // look shrunken when gaussian blur is applied
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    CIFilter *clampFilter = [CIFilter filterWithName:@"CIAffineClamp"];
+    [clampFilter setValue:inputImage forKey:@"inputImage"];
+    [clampFilter setValue:[NSValue valueWithBytes:&transform objCType:@encode(CGAffineTransform)] forKey:@"inputTransform"];
+    
+    // Apply gaussian blur filter with radius of 30
+    CIFilter *gaussianBlurFilter = [CIFilter filterWithName: @"CIGaussianBlur"];
+    [gaussianBlurFilter setValue:clampFilter.outputImage forKey: @"inputImage"];
+    [gaussianBlurFilter setValue:@30 forKey:@"inputRadius"];
+    
+    CIContext *context = [CIContext contextWithOptions:nil];
+    CGImageRef cgImage = [context createCGImage:gaussianBlurFilter.outputImage fromRect:[inputImage extent]];
+    
+    // Set up output context.
+    UIGraphicsBeginImageContext(self.frame.size);
+    CGContextRef outputContext = UIGraphicsGetCurrentContext();
+    
+    // Invert image coordinates
+    CGContextScaleCTM(outputContext, 1.0, -1.0);
+    CGContextTranslateCTM(outputContext, 0, -self.frame.size.height);
+    
+    // Draw base image.
+    CGContextDrawImage(outputContext, self.frame, cgImage);
+    
+    // Apply white tint
+    CGContextSaveGState(outputContext);
+    CGContextSetFillColorWithColor(outputContext, [UIColor colorWithWhite:1 alpha:0.2].CGColor);
+    CGContextFillRect(outputContext, self.frame);
+    CGContextRestoreGState(outputContext);
+    
+    // Output image is ready.
+    UIImage *outputImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return outputImage;
+}
+
+
+
 @end
 
 @implementation TWDefaultMessageBarStyleSheet
@@ -852,9 +921,16 @@ static UIColor *kTWDefaultMessageBarStyleSheetInfoStrokeColor = nil;
 
 - (BOOL)tw_isRunningiOS7OrLater
 {
-    NSString *systemVersion = self.systemVersion;
-    NSUInteger systemInt = [systemVersion intValue];
-    return systemInt >= kTWMessageViewiOS7Identifier;
+    return [self getSystemVersion] >= kTWMessageViewiOS7Identifier;
+}
+
+- (BOOL)tw_isRunningiOS8OrLater
+{
+    return [self getSystemVersion] >= kTWMessageViewiOS8Identifier;
+}
+
+- (NSUInteger)getSystemVersion {
+    return [self.systemVersion intValue];
 }
 
 @end
@@ -901,3 +977,13 @@ static UIColor *kTWDefaultMessageBarStyleSheetInfoStrokeColor = nil;
 }
 
 @end
+
+@implementation TWMessageBarManager (BlurMessageBar)
+
+
+
+
+@end
+
+
+
